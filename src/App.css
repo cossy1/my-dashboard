@@ -1,0 +1,33 @@
+.site-layout{
+  min-height: 100vh;
+}
+
+.content{
+  padding: 20px;
+}
+
+.users-table{
+  border: 1px solid #808080;
+  border-radius: 4px;
+}
+
+.users-table-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #808080;
+  font-weight: 500;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.users-table-content{
+  padding: 10px;
+}
+
+.header{
+  margin: 10px 0 50px 20px;
+  font-size: 30px;
+  font-weight: bold;
+}
