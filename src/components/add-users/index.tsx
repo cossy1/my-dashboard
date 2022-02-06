@@ -21,14 +21,20 @@ export const AddUsers = (props: Props) => {
   }
 
   const onFinish = (val: Record<string, any>) => {
-    val.id = id;
-    dispatch(addUser(val));
+    if(!initialValues){
+      val.id = id;
+      let updatedPayload = Object.assign({}, {...val}, {address: {city: val.city} });
+
+      dispatch(addUser(updatedPayload));
+    }
+    if(initialValues){
+      val.id = initialValues.id;
+      let updatedPayload = Object.assign({}, {...val}, {address: {city: val.city} });
+
+      dispatch(editUser(updatedPayload));
+    }
     form.resetFields();
     setShowForm(!showForm);
-
-    if(initialValues){
-      dispatch(editUser(val));
-    }
   };
 
   const defaultInitialValues = {

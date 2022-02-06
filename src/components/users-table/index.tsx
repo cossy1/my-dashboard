@@ -51,6 +51,7 @@ export const UsersTable = memo(
           <Button
             style={{ background: "#cc9966", color: "white", borderRadius: 5 }}
             onClick={() => {
+                console.log(e);
               localStorage.setItem("initialValue", JSON.stringify(e));
               setShowForm(true);
             }}
@@ -74,7 +75,9 @@ export const UsersTable = memo(
     ];
 
     useEffect(() => {
-      dispatch(fetchUsers());
+      if(isEmpty(users)){
+          dispatch(fetchUsers());
+      }
       localStorage.removeItem("initialValue");
     }, []);
 
@@ -84,7 +87,7 @@ export const UsersTable = memo(
       }
     }, [users]);
 
-      useEffect(() => {
+    useEffect(() => {
           if (users && !isEmpty(updateUsers)) {
               setData([...users, ...updateUsers]);
           }

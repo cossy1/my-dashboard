@@ -33,16 +33,22 @@ const usersSlice = createSlice({
     },
     addUser: (state, { payload }) => {
       state.loading = true;
-      let updatedPayload = Object.assign({}, {...payload}, {address: {city: payload.city} });
-      state.updateUsers = [...state.updateUsers, updatedPayload];
+      state.updateUsers = [...state.updateUsers, payload];
     },
 
     editUser: (state, { payload }) => {
       state.loading = true;
-      console.log('EDIT::::', payload);
+     state.updateUsers.forEach((e, index) => {
+       if(e.id === payload.id){
+         state.updateUsers[index] = payload;
+       }
+     });
 
-      let updatedPayload = Object.assign({}, {...payload}, {address: {city: payload.city} });
-      state.updateUsers = [...state.updateUsers, updatedPayload];
+      state.users.forEach((e, index) => {
+        if(e.id === payload.id){
+          state.users[index] = payload;
+        }
+      });
     },
     addUserSuccess: (state, { payload }) => {
       state.users = payload;
