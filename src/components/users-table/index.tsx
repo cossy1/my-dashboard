@@ -1,8 +1,9 @@
 import React, { memo, SetStateAction, useEffect, useState } from "react";
-import { Button, Table } from "antd";
+import {Button, Skeleton, Table} from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, usersSelector } from "../../slices/users";
+import { fetchUsers, deleteUser, usersSelector } from "../../slices/users";
 import { isEmpty} from 'lodash';
+import {DeleteUserModal} from "../delete-user";
 
 interface Props {
   setShowForm: React.Dispatch<SetStateAction<boolean>>;
@@ -13,6 +14,8 @@ export const UsersTable = memo(
   (props: Props) => {
     const { showForm, setShowForm } = props;
     const [data, setData] = useState<any>([]);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [id, setId] = useState<number>();
     const dispatch = useDispatch();
     const { users, updateUsers, loading, hasErrors } =
       useSelector(usersSelector);
@@ -21,22 +24,22 @@ export const UsersTable = memo(
       {
         title: "Id",
         dataIndex: "id",
-        key: "name",
+        key: "id",
       },
       {
         title: "Name",
         dataIndex: "name",
-        key: "age",
+        key: "name",
       },
       {
         title: "Username",
         dataIndex: "username",
-        key: "address",
+        key: "username",
       },
       {
         title: "Email",
         dataIndex: "email",
-        key: "address",
+        key: "email",
       },
       {
         title: "City",
@@ -47,30 +50,42 @@ export const UsersTable = memo(
       {
         title: "Edit",
         key: "action",
-        render: (e: Record<string, any>) => (
-          <Button
-            style={{ background: "#cc9966", color: "white", borderRadius: 5 }}
-            onClick={() => {
-                console.log(e);
-              localStorage.setItem("initialValue", JSON.stringify(e));
-              setShowForm(true);
-            }}
-          >
-            Edit
-          </Button>
-        ),
+        render: (e: Record<string, any>) => {
+            if(!isEmpty(e)){
+                return(
+                    <Button
+                        style={{ background: "#cc9966", color: "white", borderRadius: 5 }}
+                        onClick={() => {
+                            localStorage.setItem("initialValue", JSON.stringify(e));
+                            setShowForm(true);
+                        }}
+                    >
+                        Edit
+                    </Button>
+                )
+            }
+        },
       },
 
       {
         title: "Delete",
         key: "action",
-        render: () => (
-          <Button
-            style={{ background: "#FF0000", color: "white", borderRadius: 5 }}
-          >
-            Delete
-          </Button>
-        ),
+        render: (e: Record<string, any>) => {
+            if(!isEmpty(e)){
+               return (
+                    <Button
+                        style={{ background: "#FF0000", color: "white", borderRadius: 5 }}
+                        onClick={() => {
+                            console.log(e);
+                            setVisible(!visible);
+                            setId(e.id);
+                        }}
+                    >
+                        Delete
+                    </Button>
+                )
+            }
+        },
       },
     ];
 
@@ -93,6 +108,14 @@ export const UsersTable = memo(
           }
       }, [users, updateUsers]);
 
+    const handleDelete = () => {
+       dispatch(deleteUser(id));
+       setVisible(false);
+    };
+
+      const onCancel = () => {
+          setVisible(false)
+      };
 
     return (
       <div className="users-table">
@@ -111,9 +134,11 @@ export const UsersTable = memo(
           </div>
         </div>
 
-        <div className="users-table-content">
-          <Table dataSource={data} columns={columns} rowKey={data.id} />
-        </div>
+           <div className="users-table-content">
+               <Table dataSource={data} columns={columns} rowKey={(data) => data?.id} />
+           </div>
+
+          <DeleteUserModal visible={visible} handleDelete={handleDelete} onCancel={onCancel} />
       </div>
     );
   }

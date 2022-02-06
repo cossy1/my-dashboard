@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const AddUsers = (props: Props) => {
-  const { updateUsers } = useSelector(usersSelector);
+  const { updateUsers, loading } = useSelector(usersSelector);
   const { showForm, setShowForm } = props;
   const [id, setId] = useState<number>(updateUsers[updateUsers.length-1]?.id ?? 10);
   const dispatch = useDispatch();
@@ -110,6 +110,7 @@ export const AddUsers = (props: Props) => {
             <Button
               style={{ background: "green", color: "#ffff", borderRadius: 5 }}
               htmlType="submit"
+              loading={loading}
               onClick={() => {
                 setId((currentState) => currentState + 1);
                 form.submit();

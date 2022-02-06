@@ -34,6 +34,27 @@ const usersSlice = createSlice({
     addUser: (state, { payload }) => {
       state.loading = true;
       state.updateUsers = [...state.updateUsers, payload];
+      state.loading = false;
+    },
+
+    deleteUser: (state, { payload }) => {
+      state.loading = true;
+
+      state.updateUsers.forEach((e, index) => {
+        if(e?.id === payload){
+          delete state.updateUsers[index];
+          return state.updateUsers.filter(item => item?.id !== payload);
+        }
+      });
+
+      state.users.forEach((e) => {
+        if(e?.id === payload){
+         return  state.users.splice(state.users.findIndex(function(i){
+           state.loading = false;
+            return i.id === payload;
+          }), 1);
+        }
+      });
     },
 
     editUser: (state, { payload }) => {
@@ -42,12 +63,14 @@ const usersSlice = createSlice({
        if(e.id === payload.id){
          state.updateUsers[index] = payload;
        }
+       state.loading = false;
      });
 
       state.users.forEach((e, index) => {
         if(e.id === payload.id){
           state.users[index] = payload;
         }
+        state.loading = false;
       });
     },
     addUserSuccess: (state, { payload }) => {
@@ -62,7 +85,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const { getUsers, getUsersSuccess, getUsersFailure, addUser, editUser } =
+export const { getUsers, getUsersSuccess, getUsersFailure, addUser, editUser, deleteUser } =
   usersSlice.actions;
 
 export const usersSelector = (state: any) => state;
