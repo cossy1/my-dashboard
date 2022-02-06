@@ -98,7 +98,7 @@ export const UsersTable = memo((props: Props) => {
       dispatch(fetchUsers());
     }
     localStorage.removeItem("initialValue");
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (users) {
