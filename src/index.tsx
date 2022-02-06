@@ -5,6 +5,12 @@ import reportWebVitals from './reportWebVitals';
 import {configureStore} from "@reduxjs/toolkit";
 import {Provider} from "react-redux";
 import rootReducer from './slices/users'
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link
+} from 'react-router-dom';
 
 const store = configureStore({ reducer: rootReducer });
 
@@ -12,7 +18,9 @@ const store = configureStore({ reducer: rootReducer });
 ReactDOM.render(
   <React.StrictMode>
    <Provider store={store}>
-       <App />
+       <Router>
+           <App />
+       </Router>
    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
