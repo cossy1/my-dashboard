@@ -1,4 +1,5 @@
 import {Modal} from "antd";
+import React from "react";
 
 interface modalProp {
     visible: boolean;
